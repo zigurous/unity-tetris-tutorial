@@ -1,10 +1,10 @@
-# Project Title
+# Tetris
 
-> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris nibh elit, iaculis id condimentum vitae, efficitur nec lorem. Nam convallis ligula vitae velit porta interdum. Donec euismod sem ligula, aliquet lacinia eros mollis molestie. Maecenas et enim mollis lacus ultrices consequat. Quisque vehicula id neque sit amet placerat. Etiam posuere vel ipsum vel tincidunt. Nulla et efficitur urna. Phasellus varius gravida velit non commodo. Vivamus sagittis commodo nibh vitae posuere.
+> Tetris is a tile-matching video game created by Russian software engineer Alexey Pajitnov in 1984. In Tetris, players complete lines by moving differently shaped pieces (tetrominoes), which descend onto the playing field. The completed lines disappear and grant the player points, and the player can proceed to fill the vacated spaces. The game ends when the playing field is filled. The longer the player can delay this inevitable outcome, the higher their score will be.
 
-- **Difficulty**:
-- **Topics**:
-- **Version**:
+- **Difficulty**: Intermediate
+- **Topics**: Tilemaps, Scriptable Objects
+- **Version**: 2020.3 LTS
 - **Author**: [@adamgraham](https://github.com/adamgraham)
 - [**Tutorial Video**](https://www.youtube.com/c/zigurous)
-- [**Source Code**](https://github.com/zigurous)
+- [**Source Code**](https://github.com/zigurous/unity-tetris-tutorial)
