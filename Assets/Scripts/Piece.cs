@@ -18,26 +18,21 @@ public class Piece : MonoBehaviour
 
     public void Initialize(Board board, Vector3Int position, TetrominoData data)
     {
+        this.data = data;
         this.board = board;
         this.position = position;
         this.rotationIndex = 0;
-        this.data = data;
 
         this.stepTime = Time.time + this.stepDelay;
         this.moveTime = Time.time + this.moveDelay;
         this.lockTime = 0f;
 
-        UpdateCells();
-    }
-
-    private void UpdateCells()
-    {
         if (this.cells == null) {
-            this.cells = new Vector3Int[this.data.cells.Length];
+            this.cells = new Vector3Int[data.cells.Length];
         }
 
         for (int i = 0; i < this.cells.Length; i++) {
-            this.cells[i] = (Vector3Int)this.data.rotations[this.rotationIndex, i];
+            this.cells[i] = (Vector3Int)data.cells[i];
         }
     }
 
@@ -144,26 +139,59 @@ public class Piece : MonoBehaviour
 
     private void Rotate(int direction)
     {
-        // Store the current rotation in case the rotation fails and we need to revert
+        // Store the current rotation in case the rotation fails
+        // and we need to revert
         int originalRotation = this.rotationIndex;
 
-        // Update the cell data to the new rotation
+        // Rotate all of the cells using a rotation matrix
         this.rotationIndex = Wrap(this.rotationIndex + direction, 0, 4);
-        UpdateCells();
+        ApplyRotationMatrix(direction);
 
         // Revert the rotation if the wall kick tests fail
-        if (!TestWallKicks(direction))
+        if (!TestWallKicks(this.rotationIndex, direction))
         {
             this.rotationIndex = originalRotation;
-            UpdateCells();
+            ApplyRotationMatrix(-direction);
         }
     }
 
-    private bool TestWallKicks(int rotationDirection)
+    private void ApplyRotationMatrix(int direction)
     {
-        int wallKickIndex = GetWallKickIndex(rotationDirection);
+        float[] matrix = Data.RotationMatrix;
 
-        for (int i = 0; i < 5; i++)
+        // Rotate all of the cells using the rotation matrix
+        for (int i = 0; i < this.cells.Length; i++)
+        {
+            Vector3 cell = this.cells[i];
+
+            int x, y;
+
+            switch (this.data.tetromino)
+            {
+                case Tetromino.I:
+                case Tetromino.O:
+                    // "I" and "O" are rotated from an offset center point
+                    cell.x -= 0.5f;
+                    cell.y -= 0.5f;
+                    x = Mathf.CeilToInt((cell.x * matrix[0] * direction) + (cell.y * matrix[1] * direction));
+                    y = Mathf.CeilToInt((cell.x * matrix[2] * direction) + (cell.y * matrix[3] * direction));
+                    break;
+
+                default:
+                    x = Mathf.RoundToInt((cell.x * matrix[0] * direction) + (cell.y * matrix[1] * direction));
+                    y = Mathf.RoundToInt((cell.x * matrix[2] * direction) + (cell.y * matrix[3] * direction));
+                    break;
+            }
+
+            this.cells[i] = new Vector3Int(x, y, 0);
+        }
+    }
+
+    private bool TestWallKicks(int rotationIndex, int rotationDirection)
+    {
+        int wallKickIndex = GetWallKickIndex(rotationIndex, rotationDirection);
+
+        for (int i = 0; i < this.data.wallKicks.GetLength(1); i++)
         {
             Vector2Int translation = this.data.wallKicks[wallKickIndex, i];
 
@@ -175,9 +203,9 @@ public class Piece : MonoBehaviour
         return false;
     }
 
-    private int GetWallKickIndex(int rotationDirection)
+    private int GetWallKickIndex(int rotationIndex, int rotationDirection)
     {
-        int wallKickIndex = this.rotationIndex * 2;
+        int wallKickIndex = rotationIndex * 2;
 
         if (rotationDirection < 0) {
             wallKickIndex--;
