@@ -4,7 +4,7 @@ using UnityEngine.Tilemaps;
 public class Ghost : MonoBehaviour
 {
     public Tile tile;
-    public Board board;
+    public Board mainBoard;
     public Piece trackingPiece;
 
     public Tilemap tilemap { get; private set; }
@@ -46,22 +46,22 @@ public class Ghost : MonoBehaviour
         Vector3Int position = this.trackingPiece.position;
 
         int current = position.y;
-        int bottom = -this.board.boardSize.y / 2 - 1;
+        int bottom = -this.mainBoard.boardSize.y / 2 - 1;
 
-        this.board.Clear(this.trackingPiece);
+        this.mainBoard.Clear(this.trackingPiece);
 
         for (int row = current; row >= bottom; row--)
         {
             position.y = row;
 
-            if (this.board.IsValidPosition(this.trackingPiece, position)) {
+            if (this.mainBoard.IsValidPosition(this.trackingPiece, position)) {
                 this.position = position;
             } else {
                 break;
             }
         }
 
-        this.board.Set(this.trackingPiece);
+        this.mainBoard.Set(this.trackingPiece);
     }
 
     private void Set()

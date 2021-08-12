@@ -603,7 +603,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tile: {fileID: 11400000, guid: a10927dec698b7c49b1375f89e8db4d2, type: 2}
-  board: {fileID: 1887623656}
+  mainBoard: {fileID: 1887623656}
   trackingPiece: {fileID: 1887623655}
 --- !u!1 &1887623652
 GameObject:
