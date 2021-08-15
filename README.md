@@ -6,5 +6,5 @@
 - **Topics**: Game Logic, Tilemaps, Grids
 - **Version**: 2020.3 LTS
 - **Author**: [@adamgraham](https://github.com/adamgraham)
-- [**Tutorial Video**](https://www.youtube.com/c/zigurous)
+- [**Tutorial Video**](https://youtu.be/ODLzYI4d-J8)
 - [**Source Code**](https://github.com/zigurous/unity-tetris-tutorial)
