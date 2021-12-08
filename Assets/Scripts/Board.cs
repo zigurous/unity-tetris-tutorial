@@ -5,10 +5,12 @@ public class Board : MonoBehaviour
 {
     public Tilemap tilemap { get; private set; }
     public Piece activePiece { get; private set; }
+    public Piece nextPiece { get; private set; }
 
     public TetrominoData[] tetrominoes;
     public Vector2Int boardSize = new Vector2Int(10, 20);
     public Vector3Int spawnPosition = new Vector3Int(-1, 8, 0);
+    public Vector3Int previewPosition = new Vector3Int(-1, 12, 0);
 
     public RectInt Bounds {
         get
@@ -20,10 +22,10 @@ public class Board : MonoBehaviour
 
     private void Awake()
     {
-        Application.targetFrameRate = 60;
-
         this.tilemap = GetComponentInChildren<Tilemap>();
         this.activePiece = GetComponentInChildren<Piece>();
+        this.nextPiece = this.gameObject.AddComponent<Piece>();
+        this.nextPiece.enabled = false;
 
         for (int i = 0; i < this.tetrominoes.Length; i++) {
             this.tetrominoes[i].Initialize();
@@ -32,21 +34,34 @@ public class Board : MonoBehaviour
 
     private void Start()
     {
+        SetNextPiece();
         SpawnPiece();
+    }
+
+    private void SetNextPiece()
+    {
+        if (this.nextPiece.cells != null) {
+            Clear(this.nextPiece);
+        }
+
+        int random = Random.Range(0, this.tetrominoes.Length);
+        TetrominoData data = this.tetrominoes[random];
+
+        this.nextPiece.Initialize(this, this.previewPosition, data);
+        Set(this.nextPiece);
     }
 
     public void SpawnPiece()
     {
-        int random = Random.Range(0, this.tetrominoes.Length);
-        TetrominoData data = this.tetrominoes[random];
-
-        this.activePiece.Initialize(this, this.spawnPosition, data);
+        this.activePiece.Initialize(this, this.spawnPosition, this.nextPiece.data);
 
         if (!IsValidPosition(this.activePiece, this.spawnPosition)) {
             GameOver();
         } else {
             Set(this.activePiece);
         }
+
+        SetNextPiece();
     }
 
     public void GameOver()
