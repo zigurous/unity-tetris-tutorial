@@ -72,11 +72,13 @@ public class Piece : MonoBehaviour
 
     private void HandleMoveInputs()
     {
-        this.moveTime = Time.time + this.moveDelay;
-
         // Soft drop movement
-        if (Input.GetKey(KeyCode.S)) {
-            Move(Vector2Int.down);
+        if (Input.GetKey(KeyCode.S))
+        {
+            if (Move(Vector2Int.down)) {
+                // Update the step time to prevent double movement
+                this.stepTime = Time.time + this.stepDelay;
+            }
         }
 
         // Left/right movement
@@ -91,11 +93,8 @@ public class Piece : MonoBehaviour
     {
         this.stepTime = Time.time + this.stepDelay;
 
-        // Do not move down if the player is already holding down
-        // otherwise it can cause a double movement
-        if (!Input.GetKey(KeyCode.S)) {
-            Move(Vector2Int.down);
-        }
+        // Step down to the next row
+        Move(Vector2Int.down);
 
         // Once the piece has been inactive for too long it becomes locked
         if (this.lockTime >= this.lockDelay) {
@@ -131,6 +130,7 @@ public class Piece : MonoBehaviour
         if (valid)
         {
             this.position = newPosition;
+            this.moveTime = Time.time + this.moveDelay;
             this.lockTime = 0f; // reset
         }
 
