@@ -20,6 +20,8 @@ public class Board : MonoBehaviour
 
     private void Awake()
     {
+        Application.targetFrameRate = 60;
+
         this.tilemap = GetComponentInChildren<Tilemap>();
         this.activePiece = GetComponentInChildren<Piece>();
 
