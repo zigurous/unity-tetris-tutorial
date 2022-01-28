@@ -21,28 +21,28 @@ public class Piece : MonoBehaviour
         this.data = data;
         this.board = board;
         this.position = position;
-        this.rotationIndex = 0;
 
-        this.stepTime = Time.time + this.stepDelay;
-        this.moveTime = Time.time + this.moveDelay;
-        this.lockTime = 0f;
+        rotationIndex = 0;
+        stepTime = Time.time + stepDelay;
+        moveTime = Time.time + moveDelay;
+        lockTime = 0f;
 
-        if (this.cells == null) {
-            this.cells = new Vector3Int[data.cells.Length];
+        if (cells == null) {
+            cells = new Vector3Int[data.cells.Length];
         }
 
-        for (int i = 0; i < this.cells.Length; i++) {
-            this.cells[i] = (Vector3Int)data.cells[i];
+        for (int i = 0; i < cells.Length; i++) {
+            cells[i] = (Vector3Int)data.cells[i];
         }
     }
 
     private void Update()
     {
-        this.board.Clear(this);
+        board.Clear(this);
 
         // We use a timer to allow the player to make adjustments to the piece
         // before it locks in place
-        this.lockTime += Time.deltaTime;
+        lockTime += Time.deltaTime;
 
         // Handle rotation
         if (Input.GetKeyDown(KeyCode.Q)) {
@@ -58,16 +58,16 @@ public class Piece : MonoBehaviour
 
         // Allow the player to hold movement keys but only after a move delay
         // so it does not move too fast
-        if (Time.time > this.moveTime) {
+        if (Time.time > moveTime) {
             HandleMoveInputs();
         }
 
         // Advance the piece to the next row every x seconds
-        if (Time.time > this.stepTime) {
+        if (Time.time > stepTime) {
             Step();
         }
 
-        this.board.Set(this);
+        board.Set(this);
     }
 
     private void HandleMoveInputs()
@@ -77,7 +77,7 @@ public class Piece : MonoBehaviour
         {
             if (Move(Vector2Int.down)) {
                 // Update the step time to prevent double movement
-                this.stepTime = Time.time + this.stepDelay;
+                stepTime = Time.time + stepDelay;
             }
         }
 
@@ -91,13 +91,13 @@ public class Piece : MonoBehaviour
 
     private void Step()
     {
-        this.stepTime = Time.time + this.stepDelay;
+        stepTime = Time.time + stepDelay;
 
         // Step down to the next row
         Move(Vector2Int.down);
 
         // Once the piece has been inactive for too long it becomes locked
-        if (this.lockTime >= this.lockDelay) {
+        if (lockTime >= lockDelay) {
             Lock();
         }
     }
@@ -113,25 +113,25 @@ public class Piece : MonoBehaviour
 
     private void Lock()
     {
-        this.board.Set(this);
-        this.board.ClearLines();
-        this.board.SpawnPiece();
+        board.Set(this);
+        board.ClearLines();
+        board.SpawnPiece();
     }
 
     private bool Move(Vector2Int translation)
     {
-        Vector3Int newPosition = this.position;
+        Vector3Int newPosition = position;
         newPosition.x += translation.x;
         newPosition.y += translation.y;
 
-        bool valid = this.board.IsValidPosition(this, newPosition);
+        bool valid = board.IsValidPosition(this, newPosition);
 
         // Only save the movement if the new position is valid
         if (valid)
         {
-            this.position = newPosition;
-            this.moveTime = Time.time + this.moveDelay;
-            this.lockTime = 0f; // reset
+            position = newPosition;
+            moveTime = Time.time + moveDelay;
+            lockTime = 0f; // reset
         }
 
         return valid;
@@ -141,16 +141,16 @@ public class Piece : MonoBehaviour
     {
         // Store the current rotation in case the rotation fails
         // and we need to revert
-        int originalRotation = this.rotationIndex;
+        int originalRotation = rotationIndex;
 
         // Rotate all of the cells using a rotation matrix
-        this.rotationIndex = Wrap(this.rotationIndex + direction, 0, 4);
+        rotationIndex = Wrap(rotationIndex + direction, 0, 4);
         ApplyRotationMatrix(direction);
 
         // Revert the rotation if the wall kick tests fail
-        if (!TestWallKicks(this.rotationIndex, direction))
+        if (!TestWallKicks(rotationIndex, direction))
         {
-            this.rotationIndex = originalRotation;
+            rotationIndex = originalRotation;
             ApplyRotationMatrix(-direction);
         }
     }
@@ -160,13 +160,13 @@ public class Piece : MonoBehaviour
         float[] matrix = Data.RotationMatrix;
 
         // Rotate all of the cells using the rotation matrix
-        for (int i = 0; i < this.cells.Length; i++)
+        for (int i = 0; i < cells.Length; i++)
         {
-            Vector3 cell = this.cells[i];
+            Vector3 cell = cells[i];
 
             int x, y;
 
-            switch (this.data.tetromino)
+            switch (data.tetromino)
             {
                 case Tetromino.I:
                 case Tetromino.O:
@@ -183,7 +183,7 @@ public class Piece : MonoBehaviour
                     break;
             }
 
-            this.cells[i] = new Vector3Int(x, y, 0);
+            cells[i] = new Vector3Int(x, y, 0);
         }
     }
 
@@ -191,9 +191,9 @@ public class Piece : MonoBehaviour
     {
         int wallKickIndex = GetWallKickIndex(rotationIndex, rotationDirection);
 
-        for (int i = 0; i < this.data.wallKicks.GetLength(1); i++)
+        for (int i = 0; i < data.wallKicks.GetLength(1); i++)
         {
-            Vector2Int translation = this.data.wallKicks[wallKickIndex, i];
+            Vector2Int translation = data.wallKicks[wallKickIndex, i];
 
             if (Move(translation)) {
                 return true;
@@ -211,7 +211,7 @@ public class Piece : MonoBehaviour
             wallKickIndex--;
         }
 
-        return Wrap(wallKickIndex, 0, this.data.wallKicks.GetLength(0));
+        return Wrap(wallKickIndex, 0, data.wallKicks.GetLength(0));
     }
 
     private int Wrap(int input, int min, int max)
