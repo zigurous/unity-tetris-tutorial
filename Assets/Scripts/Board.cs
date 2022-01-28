@@ -7,11 +7,14 @@ public class Board : MonoBehaviour
     public Tilemap tilemap { get; private set; }
     public Piece activePiece { get; private set; }
     public Piece nextPiece { get; private set; }
+    public Piece savedPiece { get; private set; }
 
     public TetrominoData[] tetrominoes;
+
     public Vector2Int boardSize = new Vector2Int(10, 20);
     public Vector3Int spawnPosition = new Vector3Int(-1, 8, 0);
     public Vector3Int previewPosition = new Vector3Int(-1, 12, 0);
+    public Vector3Int holdPosition = new Vector3Int(-1, 16, 0);
 
     public RectInt Bounds
     {
@@ -26,8 +29,12 @@ public class Board : MonoBehaviour
     {
         tilemap = GetComponentInChildren<Tilemap>();
         activePiece = GetComponentInChildren<Piece>();
+
         nextPiece = gameObject.AddComponent<Piece>();
         nextPiece.enabled = false;
+
+        savedPiece = gameObject.AddComponent<Piece>();
+        savedPiece.enabled = false;
 
         for (int i = 0; i < tetrominoes.Length; i++) {
             tetrominoes[i].Initialize();
@@ -64,6 +71,32 @@ public class Board : MonoBehaviour
         }
 
         SetNextPiece();
+    }
+
+    public void SwapPiece()
+    {
+        TetrominoData savedData = this.savedPiece.data;
+
+        if (savedData.cells != null) {
+            Clear(this.savedPiece);
+        }
+
+        this.savedPiece.Initialize(this, this.holdPosition, this.nextPiece.data);
+        Set(this.savedPiece);
+
+        if (savedData.cells != null)
+        {
+            Clear(this.nextPiece);
+            this.nextPiece.Initialize(this, this.previewPosition, savedData);
+            Set(this.nextPiece);
+        }
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift)) {
+            SwapPiece();
+        }
     }
 
     public void GameOver()
