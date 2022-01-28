@@ -695,7 +695,6 @@ MonoBehaviour:
     tetromino: 6
   boardSize: {x: 10, y: 20}
   spawnPosition: {x: -1, y: 8, z: 0}
-  previewPosition: {x: -1, y: 12, z: 0}
 --- !u!1 &2144466704
 GameObject:
   m_ObjectHideFlags: 0
