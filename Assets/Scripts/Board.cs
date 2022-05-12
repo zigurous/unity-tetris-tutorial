@@ -49,46 +49,62 @@ public class Board : MonoBehaviour
 
     private void SetNextPiece()
     {
+        // Clear the existing piece from the board
         if (nextPiece.cells != null) {
             Clear(nextPiece);
         }
 
+        // Pick a random tetromino to use
         int random = Random.Range(0, tetrominoes.Length);
         TetrominoData data = tetrominoes[random];
 
+        // Initialize the next piece with the random data
+        // Draw it at the "preview" position on the board
         nextPiece.Initialize(this, previewPosition, data);
         Set(nextPiece);
     }
 
     public void SpawnPiece()
     {
+        // Initialize the active piece with the next piece data
         activePiece.Initialize(this, spawnPosition, nextPiece.data);
 
+        // Only spawn the piece if valid position otherwise game over
         if (IsValidPosition(activePiece, spawnPosition)) {
             Set(activePiece);
         } else {
             GameOver();
         }
 
+        // Set the next random piece
         SetNextPiece();
     }
 
     public void SwapPiece()
     {
-        TetrominoData savedData = this.savedPiece.data;
+        // Temporarily store the current saved data so we can swap
+        TetrominoData savedData = savedPiece.data;
 
+        // Clear the existing saved piece from the board
         if (savedData.cells != null) {
-            Clear(this.savedPiece);
+            Clear(savedPiece);
         }
 
-        this.savedPiece.Initialize(this, this.holdPosition, this.nextPiece.data);
-        Set(this.savedPiece);
+        // Store the next piece as the new saved piece
+        // Draw this piece at the "hold" position on the board
+        savedPiece.Initialize(this, holdPosition, nextPiece.data);
+        Set(savedPiece);
 
+        // Swap the saved piece to be the next piece
         if (savedData.cells != null)
         {
-            Clear(this.nextPiece);
-            this.nextPiece.Initialize(this, this.previewPosition, savedData);
-            Set(this.nextPiece);
+            // Clear the existing next piece before swapping
+            Clear(nextPiece);
+
+            // Re-initialize the next piece with the saved data
+            // Draw this piece at the "preview" position on the board
+            nextPiece.Initialize(this, previewPosition, savedData);
+            Set(nextPiece);
         }
     }
 
