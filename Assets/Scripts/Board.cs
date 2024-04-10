@@ -10,6 +10,8 @@ public class Board : MonoBehaviour
     public Vector2Int boardSize = new Vector2Int(10, 20);
     public Vector3Int spawnPosition = new Vector3Int(-1, 8, 0);
 
+    public bool IOpiecesOnly = true;
+
     public RectInt Bounds {
         get
         {
@@ -36,6 +38,17 @@ public class Board : MonoBehaviour
     public void SpawnPiece()
     {
         int random = Random.Range(0, tetrominoes.Length);
+
+        if (IOpiecesOnly) {
+            random = Random.Range(0, 2);
+            if (random == 1) {
+                random = 0;
+            }
+            else {
+                random = 3;
+            }
+        }
+        
         TetrominoData data = tetrominoes[random];
 
         activePiece.Initialize(this, spawnPosition, data);
