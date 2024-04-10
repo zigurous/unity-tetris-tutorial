@@ -10,7 +10,7 @@ public class Board : MonoBehaviour
     public Vector2Int boardSize = new Vector2Int(10, 20);
     public Vector3Int spawnPosition = new Vector3Int(-1, 8, 0);
 
-    public bool IOpiecesOnly = true;
+    public bool boring = true;
 
     public RectInt Bounds {
         get
@@ -39,7 +39,7 @@ public class Board : MonoBehaviour
     {
         int random = Random.Range(0, tetrominoes.Length);
 
-        if (IOpiecesOnly) {
+        if (boring) {
             random = Random.Range(0, 2);
             if (random == 1) {
                 random = 0;

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Piece : MonoBehaviour
@@ -53,7 +54,8 @@ public class Piece : MonoBehaviour
 
         // Handle hard drop
         if (Input.GetKeyDown(KeyCode.Space)) {
-            HardDrop();
+            if (!board.boring)
+                HardDrop();
         }
 
         // Allow the player to hold movement keys but only after a move delay
@@ -73,10 +75,9 @@ public class Piece : MonoBehaviour
     private void HandleMoveInputs()
     {
         // Soft drop movement
-        if (Input.GetKey(KeyCode.S))
+        if (Input.GetKey(KeyCode.S) && !board.boring)
         {
             if (Move(Vector2Int.down)) {
-                // Update the step time to prevent double movement
                 stepTime = Time.time + stepDelay;
             }
         }
