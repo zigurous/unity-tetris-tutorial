@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -12,6 +13,11 @@ public class Board : MonoBehaviour
 
     public bool boring = true;
 
+    public Tilemap nextPieceTilemap; // Assign in the inspector or initialize in Awake
+    private Queue<TetrominoData> upcomingPieces = new Queue<TetrominoData>();
+    public Vector3Int nextPiecePosition = new Vector3Int(8, 0, 0); // Adjust as needed
+
+
     public RectInt Bounds {
         get
         {
@@ -25,39 +31,71 @@ public class Board : MonoBehaviour
         tilemap = GetComponentInChildren<Tilemap>();
         activePiece = GetComponentInChildren<Piece>();
 
-        for (int i = 0; i < tetrominoes.Length; i++) {
+        for (int i = 0; i < tetrominoes.Length; i++)
+        {
             tetrominoes[i].Initialize();
         }
+
+        EnqueueNextPiece();
+        EnqueueNextPiece();
     }
+
+    private void EnqueueNextPiece()
+    {
+
+        int random = Random.Range(0, tetrominoes.Length);
+
+        if (boring)
+        {
+            random = Random.Range(0, 2);
+            if (random == 1)
+            {
+                random = 0;
+            }
+            else
+            {
+                random = 3;
+            }
+        }
+        upcomingPieces.Enqueue(tetrominoes[random]);
+    }
+
+    private void UpdateNextPieceDisplay()
+    {
+        nextPieceTilemap.ClearAllTiles(); // Clear previous display
+        TetrominoData nextPiece = upcomingPieces.Peek(); // Look at the next piece without removing it
+
+        foreach (Vector2Int cell in nextPiece.cells)
+        {
+            Vector3Int tilePosition = new Vector3Int(cell.x, cell.y, 0) + nextPiecePosition;
+            nextPieceTilemap.SetTile(tilePosition, nextPiece.tile);
+        }
+    }
+
 
     private void Start()
     {
         SpawnPiece();
+        UpdateNextPieceDisplay();
     }
 
     public void SpawnPiece()
     {
-        int random = Random.Range(0, tetrominoes.Length);
-
-        if (boring) {
-            random = Random.Range(0, 2);
-            if (random == 1) {
-                random = 0;
-            }
-            else {
-                random = 3;
-            }
-        }
-        
-        TetrominoData data = tetrominoes[random];
+        TetrominoData data = upcomingPieces.Dequeue(); 
 
         activePiece.Initialize(this, spawnPosition, data);
 
-        if (IsValidPosition(activePiece, spawnPosition)) {
+        if (IsValidPosition(activePiece, spawnPosition))
+        {
             Set(activePiece);
-        } else {
+        }
+        else
+        {
             GameOver();
         }
+
+        EnqueueNextPiece(); 
+        UpdateNextPieceDisplay(); 
     }
 
     public void GameOver()
