@@ -39,10 +39,10 @@ public class WelcomeManager : MonoBehaviour
     {
         Debug.Log("Starting experiment for a User: " + userId);
         PlayerPrefs.SetString("userId", userId);
-        // StartDataAquistion(userId);
-        // StartTimer();
         PrepareExperimentDirectory();
-        // SceneManager.LoadScene("Experiment");
+        //Start data collection
+        
+        FindObjectOfType<ExperimentPipeline>().StartExperiment();
     }
 
 
@@ -51,8 +51,4 @@ public class WelcomeManager : MonoBehaviour
         userId = System.Guid.NewGuid().ToString();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-    }
 }

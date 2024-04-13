@@ -56,6 +56,7 @@ public class ExperimentPipeline : MonoBehaviour
         currentSceneIndex++;
         if (currentSceneIndex < sceneDurations.Count)
         {
+            ResetTimer();
             SceneManager.LoadScene(sceneDurations[currentSceneIndex].sceneName);
         }
         else

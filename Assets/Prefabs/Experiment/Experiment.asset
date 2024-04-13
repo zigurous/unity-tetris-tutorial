@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f84c95187d2b5045b3769daa5373053, type: 3}
+  m_Name: Experiment
+  m_EditorClassIdentifier: 
+  sceneDurations:
+  - sceneName: TestScene1
+    durationInSeconds: 5
+  - sceneName: ATetrisBoring
+    durationInSeconds: 5
+  - sceneName: Survey
+    durationInSeconds: 5
+  - sceneName: TestScene2
+    durationInSeconds: 5
+  - sceneName: BTetrisFast
+    durationInSeconds: 5
+  - sceneName: Survey
+    durationInSeconds: 5
+  - sceneName: TestScene1
+    durationInSeconds: 5
+  - sceneName: CTetrisNormal
+    durationInSeconds: 5
+  - sceneName: Survey
+    durationInSeconds: 5

@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Tetris.unity
+    path: Assets/Scenes/ATetrisBoring.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
     path: Assets/Scenes/TestScene.unity
@@ -17,4 +17,16 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/TestScene2.unity
     guid: 50df8c7bcf1361f4ab56164bd5a36b89
+  - enabled: 1
+    path: Assets/Scenes/BTetrisFast.unity
+    guid: 16e457e2a318c46948c7251526affb1c
+  - enabled: 1
+    path: Assets/Scenes/CTetrisNormal.unity
+    guid: 3717cf484cb3848f1ad0eb83730faf86
+  - enabled: 1
+    path: Assets/Scenes/Survey.unity
+    guid: e13a75b5d9f12154d9662330e1160d33
+  - enabled: 1
+    path: Assets/Scenes/Welcome.unity
+    guid: bbce6fe65b1b00241a8de0bdbb0d8067
   m_configObjects: {}
