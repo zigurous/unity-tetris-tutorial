@@ -5,7 +5,7 @@ public class ImageTransition : MonoBehaviour
 {
     public Image image;
     public Sprite[] sprites;
-    public float timeBetweenChanges = 20.0f;
+    public float timeBetweenChanges = 18.0f;
 
     private float fadeDuration = 1.0f;
 
