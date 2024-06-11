@@ -52,7 +52,7 @@ public class Piece : MonoBehaviour
         }
 
         // Handle hard drop
-        if (Input.GetKeyDown(KeyCode.Space)) {
+        if (Input.GetKeyDown(KeyCode.W)) {
             HardDrop();
         }
 
