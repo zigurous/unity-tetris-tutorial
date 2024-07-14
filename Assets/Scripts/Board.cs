@@ -10,7 +10,8 @@ public class Board : MonoBehaviour
     public Vector2Int boardSize = new Vector2Int(10, 20);
     public Vector3Int spawnPosition = new Vector3Int(-1, 8, 0);
 
-    public RectInt Bounds {
+    public RectInt Bounds
+    {
         get
         {
             Vector2Int position = new Vector2Int(-boardSize.x / 2, -boardSize.y / 2);
