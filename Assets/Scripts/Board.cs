@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+[DefaultExecutionOrder(-1)]
 public class Board : MonoBehaviour
 {
     public Tilemap tilemap { get; private set; }
